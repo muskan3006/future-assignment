@@ -21,8 +21,16 @@ class AnalysingTweets {
 
   def avgLikesPerTweet(listOfStatus: Future[List[Status]], countOfTweet: Future[Int]): Future[Double] = {
     val totalLikes = listOfStatus.map(statuses => statuses.foldLeft(0)((total, element) => total + element.getFavoriteCount))
-    val avg: Future[Double] = totalLikes.flatMap(total => countOfTweet.map(count => total / count))
-    avg
+    val avgLikes: Future[Double] = totalLikes.flatMap(total => countOfTweet.map(count => total / count))
+    avgLikes
   }
 
+  def avgRetweetsPerTweet(listOfStatus: Future[List[Status]], countOfTweet: Future[Int]): Future[Double] = {
+    val totalRetweet = listOfStatus.map(statuses => statuses.foldLeft(0)((total, element) => total + element.getRetweetCount))
+    val avgRetweet: Future[Double] = totalRetweet.flatMap(total => countOfTweet.map(count => total / count))
+    avgRetweet
+  }
+
+
 }
+
