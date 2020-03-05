@@ -8,8 +8,8 @@ import scala.jdk.CollectionConverters._
 import scala.language.implicitConversions
 
 
-class AnalysingTweets {
-  val twitter: Twitter = InstanceOfTwitter.getInstanceOfTwitter
+class AnalysingTweets(twitterInstance:InstanceOfTwitter){
+  val twitter: Twitter = twitterInstance.getInstanceOfTwitter
 
   def getTweetsOnHashtag(hashtag: Query): Future[List[Status]] = Future {
     twitter.search(hashtag).getTweets.asScala.toList
@@ -30,7 +30,6 @@ class AnalysingTweets {
     val avgRetweet: Future[Double] = totalRetweet.flatMap(total => countOfTweet.map(count => total / count))
     avgRetweet
   }
-
 
 }
 

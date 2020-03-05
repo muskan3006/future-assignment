@@ -1,19 +1,20 @@
 package com.knoldus.twitter.controller
 
-import twitter4j.TwitterFactory
-import twitter4j.Twitter
-import twitter4j.conf.ConfigurationBuilder
-object InstanceOfTwitter {
+import com.typesafe.config.ConfigFactory
+import twitter4j.{Twitter, TwitterFactory}
+import twitter4j.auth.AccessToken
 
-  def getInstanceOfTwitter: Twitter ={
-    val configurationBuilder = new ConfigurationBuilder
-    configurationBuilder.setDebugEnabled(true)
-      .setOAuthConsumerKey("e6uS4phTxImI68qlA6h4V3zwR")
-      .setOAuthConsumerSecret("M8b4Q3sudgU9mNZgJx1onUlqQYi5h5YCK1GVacjAc8yHDAohFc")
-      .setOAuthAccessToken("160922224-AKOoOasbqi3huqT7uyq4Og0Oqlucn8rKeD9IcUvU")
-      .setOAuthAccessTokenSecret("7HgIJUmjOX2AZThvVp7RPWsZwOrW1ffpvkEpjeBSQynnH")
-    val tf = new TwitterFactory(configurationBuilder.build())
-    val twitter = tf.getInstance()
+class InstanceOfTwitter {
+
+  def getInstanceOfTwitter: Twitter = {
+    val config = ConfigFactory.load()
+    val twitter: Twitter = new TwitterFactory().getInstance()
+    // Authorising with your Twitter Application credentials
+    twitter.setOAuthConsumer(config.getString("consumer.key"),
+      config.getString("consumer.secret"))
+    twitter.setOAuthAccessToken(new AccessToken(
+      config.getString("token.key"),
+      config.getString("token.secret")))
     twitter
   }
 
