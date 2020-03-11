@@ -6,11 +6,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
-class UserPostAndComments {
-  val users: Future[List[Users]] = JsonUserData.getAllUserData("https://jsonplaceholder.typicode.com/users")
-  val posts: Future[List[Posts]] = JsonPostData.getAllPostData("https://jsonplaceholder.typicode.com/posts")
-  val comments: Future[List[Comments]] = JsonCommentData.getAllCommentData("https://jsonplaceholder.typicode.com/comments")
+class UserPostAndComments(parserForData: ParserForData){
+val users:Future[List[Users]]= parserForData.parser("https://jsonplaceholder.typicode.com/users")
 
+  val posts: Future[List[Posts]] = parserForData.parser("https://jsonplaceholder.typicode.com/posts")
+  val comments: Future[List[Comments]] = parserForData.parser("https://jsonplaceholder.typicode.com/comments")
   val postWithAllComments: Future[List[CommentsWithPosts]] = posts.map(listPost =>
     comments.map(comment =>
       listPost.map(post =>
@@ -38,7 +38,7 @@ class UserPostAndComments {
     listPostCount.sortBy(_.countOfPosts).reverse.head.user.name)
 
 }
-//
+
 //object A extends App {
 //  val a = new UserPostAndComments
 //  val b = a.userWithMaxCommentsOnPost
